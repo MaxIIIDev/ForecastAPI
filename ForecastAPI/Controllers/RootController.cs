@@ -58,5 +58,33 @@ namespace ForecastAPI.Controllers
 
             return Ok(forecastList);
         }
+
+        [HttpGet("/GetForecastByCityName")]
+        public async Task<ActionResult<List<ClimaProvincia>>> getForecastByCityName(string? cityName)
+        {
+            if(cityName == null)
+            {
+                return BadRequest("The city name is required");
+            }
+
+            string cityNameReadyToUse = cityName.ToString();
+
+            Root resultsFromApi = await _serviceGetInfoByAPIWeather.GetDataFromAPI(cityNameReadyToUse);
+
+            if(resultsFromApi == null)
+            {
+                return NotFound("Api don´t return info");
+            }
+
+            List<ClimaProvincia> forecastList = _conversionServiceToClimateClassProvince.ConvertApiResponseAtClimaProvincia(resultsFromApi);
+
+            if(forecastList == null)
+            {
+                return NotFound("Api dont provides forecast, so we can´t convert and return results");
+            }
+            
+            return Ok(forecastList);
+        }
+
     }
 }
