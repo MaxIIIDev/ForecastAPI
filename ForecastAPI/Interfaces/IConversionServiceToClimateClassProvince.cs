@@ -4,6 +4,6 @@ namespace ForecastAPI.Interfaces
 {
     public interface IConversionServiceToClimateClassProvince
     {
-        List<ClimaProvincia> ConvertApiResponseAtClimaProvincia(Root responseFromAPI);
+        List<ClimaProvincia> ConvertApiResponseAtClimaProvincia(Root responseFromAPI,Root? responseFromApiNow);
     }
 }

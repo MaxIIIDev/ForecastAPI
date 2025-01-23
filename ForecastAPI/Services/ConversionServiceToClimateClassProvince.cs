@@ -6,62 +6,64 @@ namespace ForecastAPI.Services
 {
     public class ConversionServiceToClimateClassProvince : IConversionServiceToClimateClassProvince
     {
-        public List<ClimaProvincia> ConvertApiResponseAtClimaProvincia(Root responseFromAPI)
+        public List<ClimaProvincia> ConvertApiResponseAtClimaProvincia(Root responseFromAPI, Root? responseFromApiNow)
         {
 
             List<ClimaProvincia> returnAllForecastDay = new List<ClimaProvincia>();
 
             string getNameByApiData = responseFromAPI.location.name;
 
-            foreach(var forecastDay in responseFromAPI.forecast.forecastday)
+            foreach (var forecastDay in responseFromAPI.forecast.forecastday)
             {
                 ClimaProvincia climaProvincia = new ClimaProvincia();
 
-                //Obtener la fecha y agregarla al tipo de clase
-                string getDateByApiData = forecastDay.date;
-                string format = "yyyy-MM-dd";
-                DateTime dateParsed = DateTime.ParseExact(getDateByApiData, format, null);
-                climaProvincia.date = dateParsed;
+                //Obtener la fecha y agregarla al tipo de clase               
+
+                climaProvincia.date = DateTime.ParseExact(forecastDay.date, "yyyy-MM-dd", null);
 
                 //Asignar el nombre ya que no varia
                 climaProvincia.name = getNameByApiData;
 
                 //Obtener y asignar latitud
-                double getLatitudeByApiData = responseFromAPI.location.lat;
-                climaProvincia.latitude = getLatitudeByApiData;
+
+                climaProvincia.latitude = responseFromAPI.location.lat;
 
                 //Obtener y asignar longitud
 
-                double getLongitudeByApiData = responseFromAPI.location.lon;
-                climaProvincia.longitude = getLongitudeByApiData;
+                climaProvincia.longitude = responseFromAPI.location.lon;
+
+                //si viene info de la temperatura actual la añade
+
+                if (responseFromApiNow != null)
+                {
+                    climaProvincia.temperatureNow = responseFromApiNow.current.temp_c;
+                    climaProvincia.conditionTextNow = responseFromAPI.current.condition.text;
+                }
+
 
                 //obtener temperatura maxima del dia individual
-                double getMaxTemperatureByApiData = forecastDay.day.maxtemp_c;
-                climaProvincia.maxTemperature = getMaxTemperatureByApiData;
+                 climaProvincia.maxTemperature = forecastDay.day.maxtemp_c;
 
                 //obtener temperatura minima del dia individual
 
-                double getMinTemperatureByApiData = forecastDay.day.mintemp_c;
-                climaProvincia.minTemperature = getMinTemperatureByApiData;
+                climaProvincia.minTemperature = forecastDay.day.mintemp_c;
                 //obtener precipitacion del dia individual
 
-                double getPrecipitationByApiData = forecastDay.day.totalprecip_mm;
-
-                climaProvincia.precipitation = getPrecipitationByApiData;
+                climaProvincia.precipitation = forecastDay.day.totalprecip_mm;
                 //obtener viento del dia individual
 
-                double getWindByApiData = forecastDay.day.maxwind_kph;
-                climaProvincia.wind = getWindByApiData;
+                
+                climaProvincia.wind = forecastDay.day.maxwind_kph;
 
                 //obtener imagen del dia individual
 
-                string getImageByApiData = forecastDay.day.condition.icon;
-                climaProvincia.image = getImageByApiData;
+                
+                climaProvincia.image = forecastDay.day.condition.icon;
 
                 //obtener la imagen que va debajo del texto
 
-                string getTextImageByApiData = forecastDay.day.condition.text;
-                climaProvincia.textImage = getTextImageByApiData;
+            
+                climaProvincia.textImage = forecastDay.day.condition.text;
 
                 //agregar la imagen a la lista
 

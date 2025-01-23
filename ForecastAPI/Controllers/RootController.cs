@@ -49,7 +49,7 @@ namespace ForecastAPI.Controllers
                 return NotFound("Api don´t return info");
             }
 
-            List<ClimaProvincia> forecastList = _conversionServiceToClimateClassProvince.ConvertApiResponseAtClimaProvincia(resultsFromApi); // Call to the conversion services for convert the API DATA to class Clima Provincia
+            List<ClimaProvincia> forecastList = _conversionServiceToClimateClassProvince.ConvertApiResponseAtClimaProvincia(resultsFromApi,null); // Call to the conversion services for convert the API DATA to class Clima Provincia
 
             if(forecastList == null) // Validation for forecast list provides for conversion services
             {
@@ -70,14 +70,18 @@ namespace ForecastAPI.Controllers
             string cityNameReadyToUse = cityName.ToString();
 
             Root resultsFromApi = await _serviceGetInfoByAPIWeather.GetDataFromAPI(cityNameReadyToUse);
-
+            Root resultsFromApiNow = await _serviceGetInfoByAPIWeather.GetDataFromAPINow(cityNameReadyToUse);
             if(resultsFromApi == null)
             {
                 return NotFound("Api don´t return info");
             }
+            if(resultsFromApiNow == null)
+            {
+                return NotFound("Api now don´t return info");
+            }
 
-            List<ClimaProvincia> forecastList = _conversionServiceToClimateClassProvince.ConvertApiResponseAtClimaProvincia(resultsFromApi);
-
+            List<ClimaProvincia> forecastList = _conversionServiceToClimateClassProvince.ConvertApiResponseAtClimaProvincia(resultsFromApi,resultsFromApiNow);
+            
             if(forecastList == null)
             {
                 return NotFound("Api dont provides forecast, so we can´t convert and return results");
