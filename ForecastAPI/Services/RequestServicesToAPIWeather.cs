@@ -135,6 +135,46 @@ namespace ForecastAPI.Services
             }
             return returnData;
         }
+        public async Task<Root> GetDataFromAPINow(double lat, double lon)
+        {
+            Root returnData = null;
+            string urlCurrent = "https://api.weatherapi.com/v1/current.json?";
+            try
+            {
+                string urlFragmentWithCityName = $"q={lat}%20{lon}";
+
+                string urlFragmentWithCityNameReadyToGo = urlFragmentWithCityName.Replace(",", "."); 
+
+
+
+                string fullURL = $"{urlCurrent}{urlFragmentWithCityNameReadyToGo}&{APIKEY}"; //URL PREPARADA PARA LANZAR LA LLAMADA
+
+                HttpResponseMessage? dataFromApiWeather = await httpClient.GetAsync(fullURL); //SE REALIZA LA PETICION A LA API
+
+                dataFromApiWeather.EnsureSuccessStatusCode();   //SE VALIDA SI LA PETICION FUNCIONO; SI NO PUM, EXCEPCION
+
+                string readDataFromApiWeather = await dataFromApiWeather.Content.ReadAsStringAsync(); // SE LEE LA INFORMACION DE LA PETICION Y SE PONE EL JSON A STRING
+
+                Root apiDataOpenToWork = JsonSerializer.Deserialize<Root>(readDataFromApiWeather); //SE PARSEA ENTRE COMILLAS A FORMATO C# ACORDE AL MOdelo
+                if (apiDataOpenToWork == null)
+                {
+                    throw new Exception("API don´t return information");
+                }
+                returnData = apiDataOpenToWork;    // SE CREO LA VARIABLE DE ESTA FORMA PORQUE ME DIO FIACA PONERLA AFUERA
+
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Debug.WriteLine("Ocurrió un error de red: " + httpEx.Message);  // EXCEPCION POR EL PUM DE LA LINEA 30
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Ocurrio un error" +
+                    "\nServicio= RequestServicesToAPIWeather");
+                Debug.WriteLine("Error Message= " + ex.Message);
+            }
+            return returnData;
+        }
 
     }
 }

@@ -14,6 +14,7 @@
         public double wind { get; set; }
         public string? conditionTextNow { get; set; }
         public string image { get; set; }
+        public string imageNow { get; set; }
         public string textImage { get; set; }
         
 

@@ -38,6 +38,7 @@ namespace ForecastAPI.Services
                 {
                     climaProvincia.temperatureNow = responseFromApiNow.current.temp_c;
                     climaProvincia.conditionTextNow = responseFromAPI.current.condition.text;
+                    climaProvincia.imageNow = responseFromApiNow.current.condition.icon;
                 }
 
 

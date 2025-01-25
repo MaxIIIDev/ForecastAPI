@@ -44,12 +44,20 @@ namespace ForecastAPI.Controllers
             
 
             Root resultsFromApi = await _serviceGetInfoByAPIWeather.GetDataFromAPI(latitudeValidated, longitudeValidated); //Call to the services that provides data from API WEATHER
+            Root resultsFromApiNow = await _serviceGetInfoByAPIWeather.GetDataFromAPINow(latitudeValidated,longitudeValidated);
             if (resultsFromApi == null) // Validation for data from API WEATHER for possibles null values
             {
                 return NotFound("Api don´t return info");
             }
-
-            List<ClimaProvincia> forecastList = _conversionServiceToClimateClassProvince.ConvertApiResponseAtClimaProvincia(resultsFromApi,null); // Call to the conversion services for convert the API DATA to class Clima Provincia
+            if(resultsFromApiNow == null)
+            {
+                return NotFound("Api now don´t return info");
+            }
+            //TODO::: HAY QUE HACER QUE LE PEGUE A LA API DE CURRENT DE API WEATHER PARA TRAER LAS CONDICIONES ACTUALES Y LA TEMPERATURA ACTUAL PERO POR LATITUD Y LONGITUD
+            /////////////////////////////////////////////////////
+            /////////////////////////////////////////////////
+            ///8///////////////////////
+            List<ClimaProvincia> forecastList = _conversionServiceToClimateClassProvince.ConvertApiResponseAtClimaProvincia(resultsFromApi,resultsFromApiNow); // Call to the conversion services for convert the API DATA to class Clima Provincia
 
             if(forecastList == null) // Validation for forecast list provides for conversion services
             {
