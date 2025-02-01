@@ -25,7 +25,7 @@ namespace ForecastAPI.Services
                 string urlFragmentWithLatAndLonReadyToGo = urlFragmentWithLatAndLonRaw.Replace(",", "."); //Se realiza la conversion ya que los puntos al pasarlos a string se convierten en coma, y devuelve valores erroneos en geolocalizacion
                 string actualDate = DateTime.Now.ToString(); // agregue este fragmento para añadir legibilidad al codigo
 
-                string fullURL = $"{BASEURL}{urlFragmentWithLatAndLonReadyToGo}&days=3&dt={actualDate}&{APIKEY}"; //URL PREPARADA PARA LANZAR LA LLAMADA
+                string fullURL = $"{BASEURL}{urlFragmentWithLatAndLonReadyToGo}&days=3&{APIKEY}"; //URL PREPARADA PARA LANZAR LA LLAMADA
                 
                 HttpResponseMessage? dataFromApiWeather = await httpClient.GetAsync(fullURL); //SE REALIZA LA PETICION A LA API
 
@@ -66,7 +66,7 @@ namespace ForecastAPI.Services
 
                 string actualDate = DateTime.Now.ToString(); // agregue este fragmento para añadir legibilidad al codigo
 
-                string fullURL = $"{BASEURL}{urlFragmentWithCityNameReadyToGo}&days=3&dt={actualDate}&{APIKEY}"; //URL PREPARADA PARA LANZAR LA LLAMADA
+                string fullURL = $"{BASEURL}{urlFragmentWithCityNameReadyToGo}&days=3&{APIKEY}"; //URL PREPARADA PARA LANZAR LA LLAMADA
 
                 HttpResponseMessage? dataFromApiWeather = await httpClient.GetAsync(fullURL); //SE REALIZA LA PETICION A LA API
 
